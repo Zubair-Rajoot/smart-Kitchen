@@ -60,7 +60,7 @@ const CreateContainer = () => {
           setImageAsset(downloadURL);
           setIsLoading(false);
           setFields(true);
-          setMsg("Image uploaded successfully 😊");
+          setMsg("Image uploaded successfully ");
           setAlertStatus("success");
           setTimeout(() => {
             setFields(false);

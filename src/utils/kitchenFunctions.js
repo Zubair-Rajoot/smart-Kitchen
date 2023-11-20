@@ -1,66 +1,43 @@
-import {
-  collection,
-  doc,
-  getDocs,
-  orderBy,
-  query,
-  setDoc,
-} from "firebase/firestore";
-import { firestore } from "../firebase.config";
-
-// Saving new Item
-export const saveItem = async (data) => {
-  await setDoc(doc(firestore, "foodItems", `${Date.now()}`), data, {
-    merge: true,
-  });
-};
-
-// getall food items
-export const getAllFoodItems = async () => {
-  const items = await getDocs(
-    query(collection(firestore, "foodItems"), orderBy("id", "desc"))
-  );
-
-  return items.docs.map((doc) => doc.data());
-};
 
 
+// kitchenFunctions.js
+
+
+export const stockData = () =>{
+  stockData = localStorage.getItem("stock");
+  const stock = stockData ? JSON.parse(stockData) : [];
+  return stock;
+}
 
 export const fetchStock = () => {
   try {
     const stockData = localStorage.getItem("stock");
     const stock = stockData ? JSON.parse(stockData) : [];
-    return stock;  // Ensure this returns a valid array
+    return stock;
   } catch (error) {
     console.error("Error fetching stock:", error);
     return [];
   }
 };
+// ... (other functions)
 
 
-// Add stock
 export const addStock = (stockItem) => {
   const stock = fetchStock();
   stock.push(stockItem);
   localStorage.setItem("stock", JSON.stringify(stock));
-  return stock; // Return the updated stock
+  return stock;
 };
 
-// Remove stock
 export const removeStock = (stockItemId) => {
   const stock = fetchStock().filter((item) => item.id !== stockItemId);
   localStorage.setItem("stock", JSON.stringify(stock));
-  return stock; // Return the updated stock
+  return stock;
 };
-
-// Update stock
-// kitchenFunctions.js
 
 export const updateStock = (id, newQuantity) => {
   try {
     const existingStock = fetchStock();
-    console.log('Existing stock:', existingStock);  // Log existingStock
-
     const updatedStock = existingStock.map((item) => {
       if (item.id === id) {
         // Update the quantity of the matching stock item
@@ -69,16 +46,10 @@ export const updateStock = (id, newQuantity) => {
       return item;
     });
 
-    console.log('Updated stock:', updatedStock);
     localStorage.setItem("stock", JSON.stringify(updatedStock));
-    return updatedStock;
   } catch (error) {
     console.error("Error updating stock:", error);
-    return [];
   }
 };
 
-
-
-// ... (other functions)
 
